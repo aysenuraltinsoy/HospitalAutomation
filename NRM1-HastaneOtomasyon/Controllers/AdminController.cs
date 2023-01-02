@@ -1,9 +1,11 @@
 ﻿using Hastane.Business.Models.DTOs;
 using Hastane.Business.Services.AdminService;
+using Hastane.Core.Enums;
 using Hastane.DataAccess.Abstract;
 using Hastane.Entities.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using NRM1_HastaneOtomasyon.Models;
 
@@ -48,81 +50,69 @@ namespace NRM1_HastaneOtomasyon.Controllers
             return View(addManagerDTO);
         }
 
-        //public async Task<IActionResult> ListOfManagers()
-        //{
-        //    var managerList=await _managerRepo.GetAll();
-        //    ListOfManagersVM listOfManagers = new ListOfManagersVM();
-        //    listOfManagers.Managers=managerList; //Veri tabanından çağırdıklarımı vm içindeki listeye
-        //    return View(listOfManagers);
+        public async Task<IActionResult> ListOfManagers()
+        {
+            var managerList = await _adminService.ListOfManager();
+            return View(managerList);
 
-        //}
-
-        //    [HttpGet]
-        //    public IActionResult UpdatedManager(Guid id)
-        //    {
-        //        var updatedManager = (Manager)HomeController._myUser.Find(i => i.Id == id);
-        //        return View(updatedManager);
-        //    }
+        }
 
 
 
-        //    [HttpPost]
-        //    public IActionResult UpdatedManager(Manager manager)
-        //    {
-        //        HomeController._myUser.Remove(HomeController._myUser.Find(i => i.Id == manager.Id));
-        //        HomeController._myUser.Add(manager);
-        //        return RedirectToAction("ListOfManagers");
-        //    }
+        //Güncelleme
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatedPersonel(Guid id)
+        {
+            ViewBag.Roles = new SelectList(Enum.GetValues(typeof(Roles)), Roles.Personel);
+            return View(await _adminService.EmployeeGetByID(id));
+        }
 
 
-        //    public IActionResult DeletedManager(Guid id)
-        //    {
-        //        HomeController._myUser.Remove(HomeController._myUser.Find(i => i.Id == id));
-        //        return RedirectToAction("ListOfManagers");
-        //    }
 
-        //    [HttpGet]
-        //    public IActionResult AddPersonnel()
-        //    {
-        //        //Burası HttpGet olarak ifade edilir. Burada Mantık Kullanıcıya Sayfa görüntsünü getirmek için yazarız.
-        //        return View();
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> UpdatedPersonel(Employee employee)
+        {
+            await _adminService.UpdateEmployee(employee);
+            
+            return RedirectToAction("ListOfPersonel");
+        }
 
-        //    [HttpPost]
-        //    public IActionResult AddPersonnel(Personnel personnel)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            //Veritabanı işlemleri gerçekleşecek
-        //            HomeController._myUser.Add(personnel);
-        //            return RedirectToAction("ListOfPersonnels");
-        //        }
 
-        //        return View(personnel); //Bunu yapmasanda hatalı veri girişi olursa sana tekrardan aynı sayfayı döner.Veriler sabit kalır ama biz işimizi garantiye aldık.
+        public async Task<IActionResult> DeletePersonel(Guid id)
+        {
+            await _adminService.DeleteEmployee(id);
+            return RedirectToAction("ListOfPersonel");
+        }
 
-        //    }
+        [HttpGet]
+        public IActionResult AddPersonel()
+        {
+            //Burası HttpGet olarak ifade edilir. Burada Mantık Kullanıcıya Sayfa görüntsünü getirmek için yazarız.
+            return View();
+        }
 
-        //    //IUser Tipinde Verileri Gönderdim.Gelen Verinin Tipinin Personnels olduğu kısmını View tarafında kontrol ettim.
-        //    public IActionResult ListOfPersonnels()
-        //    {
-        //        return View(HomeController._myUser);
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> AddPersonel(AddPersonelDTO addPersonelDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                await _adminService.AddPersonel(addPersonelDTO);
+                return RedirectToAction("ListOfPersonel");
+            }
 
-        //    //Burada kullanıcının tipinin Personel olup olmadığını kontrol ettik Personel olanları bir listede topladık. Bu listeyi return view derken parametre olarak verdik.
-        //    public IActionResult ListOfPersonnels2()
-        //    {
-        //        List<Personnel> myPersonnels = new List<Personnel>();
-        //        foreach (var item in HomeController._myUser)
-        //        {
-        //            if (item is Personnel)
-        //            {
-        //                myPersonnels.Add((Personnel)item);
+            return View(addPersonelDTO); //Bunu yapmasanda hatalı veri girişi olursa sana tekrardan aynı sayfayı döner.Veriler sabit kalır ama biz işimizi garantiye aldık.
 
-        //            }
-        //        }
+        }
+        public async Task<IActionResult> ListOfPersonel()
+        {
+            var personelList = await _adminService.ListOfPersonel();
+            return View(personelList);
 
-        //        return View(myPersonnels);
-        //    }
+        }
+
+        //Burada kullanıcının tipinin Personel olup olmadığını kontrol ettik Personel olanları bir listede topladık. Bu listeyi return view derken parametre olarak verdik.
+       
 
         //    //Burada TempData - ViewBag - ViewData kullanacağız
         //    public IActionResult ListOfPersonnels3()

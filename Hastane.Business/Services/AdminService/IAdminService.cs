@@ -1,5 +1,6 @@
 ﻿using Hastane.Business.Models.DTOs;
 using Hastane.Business.Models.VMs;
+using Hastane.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,12 @@ namespace Hastane.Business.Services.AdminService
         Task AddManager(AddManagerDTO addManagerDTO);
 
         Task<List<ListOfManagersVM>> ListOfManager();
+        Task AddPersonel(AddPersonelDTO addPersonelDTO);
+
+        Task<List<ListOfPersonelVM>> ListOfPersonel();
+
+        Task<Employee> EmployeeGetByID(Guid id);
+        Task UpdateEmployee(Employee employee);
+        Task DeleteEmployee(Guid id);
     }
 }

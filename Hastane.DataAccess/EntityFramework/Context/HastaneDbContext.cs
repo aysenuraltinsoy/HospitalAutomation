@@ -1,6 +1,7 @@
 ﻿using Hastane.DataAccess.EntityFramework.Mapping;
 using Hastane.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,18 @@ namespace Hastane.DataAccess.EntityFramework.Context
                 .ApplyConfiguration(new EmployeeMapping());
             
             base.OnModelCreating(modelBuilder);
+        }
+        public class HastaneDbContextFactory : IDesignTimeDbContextFactory<HastaneDbContext>
+        {
+            public HastaneDbContext CreateDbContext(string[] args)
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<HastaneDbContext>();
+                optionsBuilder.UseSqlServer("Server=DESKTOP-ORUQO20;Database=NRM1HastaneDb;Trusted_Connection=True;TrustServerCertificate=True;");
+
+
+
+                return new HastaneDbContext(optionsBuilder.Options);
+            }
         }
     }
 }

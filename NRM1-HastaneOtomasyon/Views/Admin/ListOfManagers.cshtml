@@ -1,5 +1,4 @@
-﻿@model NRM1_HastaneOtomasyon.Models.VMs.ListOfManagersVM
-
+﻿@model IEnumerable<Hastane.Business.Models.VMs.ListOfManagersVM>
 @{
     ViewData["Title"] = "ListOfManagers";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -23,18 +22,15 @@
                 EmailAddress
             </th>
             <th>
-                Password
+                Roles
             </th>
             <th>
-                Status
-            </th>
-            <th>
-                Function
+                Salary
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Employees)
+        @foreach (var item in Model)
         {
                 <tr>
                     <td>
@@ -47,14 +43,14 @@
                         @item.EmailAddress
                     </td>
                     <td>
-                        @item.Password
+                        @item.Roles
                     </td>
                     <td>
-                        @item.Status
+                        @item.Salary
                     </td>
                     <td>
-                        <a class="btn btn-success" asp-action="UpdatedManager" asp-route-id="@item.Id">Update</a>
-                        <a class="btn btn-danger" asp-action="DeletedManager" asp-route-id="@item.Id">Delete</a>
+                        <a class="btn btn-success" asp-action="UpdatedManager" asp-route-id="@item.ID">Update</a>
+                        <a class="btn btn-danger" asp-action="DeletedManager" asp-route-id="@item.ID">Delete</a>
                     </td>
                 </tr>  
         }

@@ -12,12 +12,12 @@ namespace Hastane.Business.Models.DTOs
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string EmailAddress { get; set; }
+        public Roles Roles { get; set; } = Roles.Manager;
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public string? EmailAddress { get; set; }
         public Status Status { get; set; } = Status.Active;
-        public decimal Salary { get; set; }
+        public decimal? Salary { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

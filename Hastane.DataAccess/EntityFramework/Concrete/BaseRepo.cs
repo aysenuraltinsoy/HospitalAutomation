@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-
+using Hastane.Core.Enums;
 namespace Hastane.DataAccess.EntityFramework.Concrete
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : class, IBaseEntity
@@ -37,7 +37,8 @@ namespace Hastane.DataAccess.EntityFramework.Concrete
 
         public async Task<bool> Delete(T entity)
         {
-            entity.Status = Core.Enums.Status.Passive;
+            entity.Status = Status.Passive;
+            entity.DeletedTime= DateTime.Now;
             return await Save() > 0; 
         }
 

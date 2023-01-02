@@ -1,18 +1,25 @@
-﻿@*@model NRM1_HastaneOtomasyon.Models.Personnel
+﻿@model Hastane.Entities.Concrete.Employee
 
 @{
-    ViewData["Title"] = "AddPersonnel";
+    ViewData["Title"] = "UpdatedPersonel";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>AddPersonnel</h1>
+<h1>UpdatedPersonel</h1>
 
-<h4>Personnel</h4>
+<h4>Employee</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddPersonnel">
+        <form asp-action="UpdatedPersonel">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Password" />
+            <input type="hidden" asp-for="CreatedTime" />
+            <input type="hidden" asp-for="UpdatedTime" />
+            <input type="hidden" asp-for="IdentityNumber" />
+            <input type="hidden" asp-for="DeletedTime" />
+            <input type="hidden" asp-for="Status" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -29,17 +36,19 @@
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <label asp-for="Roles" class="control-label"></label>
+                <select asp-for="Roles" asp-items="@ViewBag.Roles" class="form-control"></select>
+                <span asp-validation-for="Roles" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Salary" class="control-label"></label>
                 <input asp-for="Salary" class="form-control" />
                 <span asp-validation-for="Salary" class="text-danger"></span>
             </div>
+       
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -49,4 +58,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-*@

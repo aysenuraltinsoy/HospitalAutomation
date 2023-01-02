@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hastane.Business.Models.VMs
 {
-    public class ListOfManagersVM
+    public class ListOfPersonelVM
     {
         public Guid? ID { get; set; }
         public string? Name { get; set; }

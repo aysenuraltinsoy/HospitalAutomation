@@ -1,3 +1,4 @@
+using Hastane.Business.Services.AdminService;
 using Hastane.DataAccess.Abstract;
 using Hastane.DataAccess.EntityFramework.Concrete;
 using Hastane.DataAccess.EntityFramework.Context;
@@ -32,6 +33,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();  //addscope sýralamasýnýn önemi olabilir
+builder.Services.AddScoped<IAdminService, AdminService>();  
 
 //builder.Services.AddSession(options => {
 //    options.IdleTimeout = TimeSpan.FromMinutes(1);

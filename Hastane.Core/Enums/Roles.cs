@@ -10,6 +10,6 @@ namespace Hastane.Core.Enums
     {
         Admin=1,
         Manager,
-        Personnel
+        Personel
     }
 }
