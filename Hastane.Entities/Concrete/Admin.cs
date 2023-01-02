@@ -20,5 +20,7 @@ namespace Hastane.Entities.Concrete
         public DateTime CreatedTime { get; set; }
         public DateTime? DeletedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
+        public Roles Roles { get; set; }
+ 
     }
 }

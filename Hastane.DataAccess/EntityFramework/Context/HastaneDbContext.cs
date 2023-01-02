@@ -15,14 +15,14 @@ namespace Hastane.DataAccess.EntityFramework.Context
         {
 
         }
-        public DbSet<Manager> Managers { get; set; }
-        public DbSet<Personnel> Personnels { get; set; }
+     
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new AdminMapping());
-            modelBuilder.ApplyConfiguration(new ManagerMapping());
-            modelBuilder.ApplyConfiguration(new PersonnelMapping());
+            modelBuilder.ApplyConfiguration(new AdminMapping())
+                .ApplyConfiguration(new EmployeeMapping());
+            
             base.OnModelCreating(modelBuilder);
         }
     }

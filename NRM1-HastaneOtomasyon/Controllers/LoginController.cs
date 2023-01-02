@@ -1,23 +1,26 @@
 ﻿using Hastane.DataAccess.Abstract;
 using Hastane.Entities.Concrete;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NRM1_HastaneOtomasyon.Models;
+using System.Security.Claims;
 
 namespace NRM1_HastaneOtomasyon.Controllers
 {
     public class LoginController : Controller
     {
         private readonly IAdminRepo _adminRepo;
-        private readonly IManagerRepo _managerRepo;
-        private readonly IPersonnelRepo _personnelRepo;
+        private readonly IEmployeeRepo _employeeRepo;
+        
 
-        public LoginController(IAdminRepo adminRepo, IManagerRepo managerRepo, IPersonnelRepo personnelRepo)
+        public LoginController(IAdminRepo adminRepo, IEmployeeRepo employeeRepo)
         {
             _adminRepo = adminRepo;
-            _managerRepo = managerRepo;
-            _personnelRepo = personnelRepo;
+            _employeeRepo = employeeRepo;
+            
         }
 
         public IActionResult Login()
@@ -28,32 +31,40 @@ namespace NRM1_HastaneOtomasyon.Controllers
 
 
         [HttpPost]
-        public IActionResult Login(string emailAddress, string password)
+        public async Task<IActionResult> Login(string emailAddress, string password)
         {
 
             //Admin,Manager,Personnel aslında tek bir tablodan yönetilir ve bu tablodan sorgu yapılır. Anlık çözüm üretmek için böyle bir davranış sergiledim.
 
             //BaseRepo'da yazabilirdim bu GetByEmail metotlarını yazmamın nedeni ise baseRepo'daki T kısıtlamasında emailAdress ve Password bilgilerinin bulunmamasından kaynaklanmaktadır!
 
-            var adminUser=_adminRepo.GetByEmail(emailAddress,password);
-            var managerUser=_managerRepo.GetByEmail(emailAddress,password);
-            var personnelUser=_personnelRepo.GetByEmail(emailAddress,password);
+            var adminUser=await _adminRepo.GetByEmail(emailAddress,password);
+            
+            
+            var claims = new List<Claim>();
 
-                if (adminUser != null)
-                {
+            if (adminUser != null)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
+            
+
+            var userIdentity = new ClaimsIdentity(claims, "Login");
+            ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+
+            if (adminUser != null)
+            {
                     return RedirectToAction("Index", "Admin");
-                }
-                if (managerUser != null)
-                {
-                 return RedirectToAction("Index", "Manager");
-                }
-                   
-                if (personnelUser != null)
-                {
-                     return RedirectToAction("Index", "Personnel");
-                }
-                    
+            }
+               
             return View();
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
     }
 }

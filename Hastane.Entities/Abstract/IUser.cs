@@ -16,5 +16,6 @@ namespace Hastane.Entities.Abstract
         string EmailAddress { get; set; }
         string Password { get; set; }
         Status Status { get; set; }
+        Roles Roles { get; set; }
     }
 }

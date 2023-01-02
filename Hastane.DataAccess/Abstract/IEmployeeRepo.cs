@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hastane.DataAccess.Abstract
 {
-    public interface IPersonnelRepo:IBaseRepo<Personnel>
+    public interface IEmployeeRepo:IBaseRepo<Employee>
     {
-        Task<Personnel> GetByEmail(string email, string password);
     }
 }

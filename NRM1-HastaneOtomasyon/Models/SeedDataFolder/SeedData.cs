@@ -19,14 +19,35 @@ namespace NRM1_HastaneOtomasyon.Models.SeedDataFolder
                 dbContext.Admins.Add(new Admin()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Şahin",
-                    Surname = "Uzun",
-                    EmailAddress = "sahinuzun@gmail.com",
+                    Name = "Ayşenur",
+                    Surname = "Altınsoy",
+                    EmailAddress = "aysenur@gmail.com",
                     Status = Status.Active,
                     Password = "1234",
                     CreatedTime = DateTime.Now,
+                    Roles=Roles.Admin,
 
                 });
+
+            }
+
+            if (dbContext.Employees.Count()==0)
+            {
+                dbContext.Employees.Add(new Employee()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Ayşe",
+                    Surname = "Altın",
+                    EmailAddress = "aysenur45@gmail.com",
+                    Status = Status.Active,
+                    Salary=14500,
+                    IdentityNumber="57187452",
+                    Password = "1234",
+                    CreatedTime = DateTime.Now,
+                    Roles = Roles.Manager,
+
+                });
+
             }
             dbContext.SaveChanges();
         }

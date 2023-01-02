@@ -1,19 +1,22 @@
-﻿using Hastane.DataAccess.Abstract;
+﻿using Hastane.Business.Models.DTOs;
+using Hastane.Business.Services.AdminService;
+using Hastane.DataAccess.Abstract;
 using Hastane.Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NRM1_HastaneOtomasyon.Models;
-using NRM1_HastaneOtomasyon.Models.DTOs;
-using NRM1_HastaneOtomasyon.Models.VMs;
+
 
 namespace NRM1_HastaneOtomasyon.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
-    {
-        private readonly IManagerRepo _managerRepo;
-        public AdminController(IManagerRepo managerRepo)
+    {     
+        private readonly IAdminService _adminService;
+        public AdminController(IAdminService adminService)
         {
-            _managerRepo= managerRepo;
+            _adminService=adminService;
         }
         public IActionResult Index()
         {
@@ -35,34 +38,24 @@ namespace NRM1_HastaneOtomasyon.Controllers
         [HttpPost]
         public async Task<IActionResult> AddManager(AddManagerDTO addManagerDTO)
         {
-            Manager addManager=new Manager();
+            
             if (ModelState.IsValid)
             {
-                addManager.Id= addManagerDTO.Id;
-                addManager.Name= addManagerDTO.Name;
-                addManager.Surname= addManagerDTO.Surname;
-                addManager.Salary= addManagerDTO.Salary;
-                addManager.Status= addManagerDTO.Status;
-                addManager.EmailAddress= addManagerDTO.EmailAddress;
-                addManager.CreatedTime= addManagerDTO.CreatedDate;
-
-                addManager.Password = GivePassword();
-
-                await _managerRepo.Add(addManager);
+                await _adminService.AddManager(addManagerDTO);
                 return RedirectToAction("ListOfManagers");
             }
 
             return View(addManagerDTO);
         }
 
-        public async Task<IActionResult> ListOfManagers()
-        {
-            var managerList=await _managerRepo.GetAll();
-            ListOfManagersVM listOfManagers = new ListOfManagersVM();
-            listOfManagers.Managers=managerList; //Veri tabanından çağırdıklarımı vm içindeki listeye
-            return View(listOfManagers);
-            
-        }
+        //public async Task<IActionResult> ListOfManagers()
+        //{
+        //    var managerList=await _managerRepo.GetAll();
+        //    ListOfManagersVM listOfManagers = new ListOfManagersVM();
+        //    listOfManagers.Managers=managerList; //Veri tabanından çağırdıklarımı vm içindeki listeye
+        //    return View(listOfManagers);
+
+        //}
 
         //    [HttpGet]
         //    public IActionResult UpdatedManager(Guid id)
@@ -205,21 +198,8 @@ namespace NRM1_HastaneOtomasyon.Controllers
         //        //ViewBag.ourManageer --> myManagers 
         //    }
 
-        [NonAction]
-        private string GivePassword()
-        {
-            Random rastgele = new Random();
-            string sifre = String.Empty;
 
-            for (int i = 1; i <= 6; i++)
-            {
-                int sayi1 = rastgele.Next(65, 91);
-                //65 dahil, 91 dahil değil A ile Z arasında
-                sifre += (char)sayi1;
-            }
 
-            return sifre;
-        }
 
     }
 }

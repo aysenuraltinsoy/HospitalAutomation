@@ -1,17 +1,18 @@
-﻿using Hastane.Core.Entities.Abstract;
-using Hastane.Core.Enums;
-using Hastane.Entities.Abstract;
+﻿using Hastane.Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NRM1_HastaneOtomasyon.Models.DTOs
+namespace Hastane.Business.Models.DTOs
 {
-    public class AddManagerDTO 
+    public class AddManagerDTO
     {
         public Guid Id { get; set; } = Guid.NewGuid();
+
+        
         public string Name { get; set; }
         public string Surname { get; set; }
         public string EmailAddress { get; set; }
