@@ -1,3 +1,6 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Hastane.Business.IoC;
 using Hastane.Business.Services.AdminService;
 using Hastane.DataAccess.Abstract;
 using Hastane.DataAccess.EntityFramework.Concrete;
@@ -31,9 +34,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     x.SlidingExpiration = true;   //If the request is received, the cookie will be extended
     x.Cookie.MaxAge = x.ExpireTimeSpan;
 });
-builder.Services.AddScoped<IAdminRepo, AdminRepo>();
-builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();  //addscope sýralamasýnýn önemi olabilir
-builder.Services.AddScoped<IAdminService, AdminService>();  
+//Autofac implementation
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule(new DependencyResolver());
+});
+//builder.Services.AddScoped<IAdminRepo, AdminRepo>();
+//builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();  //addscope sýralamasýnýn önemi olabilir
+//builder.Services.AddScoped<IAdminService, AdminService>();  
 
 //builder.Services.AddSession(options => {
 //    options.IdleTimeout = TimeSpan.FromMinutes(1);
@@ -58,7 +67,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapControllerRoute(
+  name: "areas",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Login}/{id?}");

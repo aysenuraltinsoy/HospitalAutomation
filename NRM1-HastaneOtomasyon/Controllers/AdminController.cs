@@ -88,7 +88,7 @@ namespace NRM1_HastaneOtomasyon.Controllers
         [HttpGet]
         public IActionResult AddPersonel()
         {
-            //Burası HttpGet olarak ifade edilir. Burada Mantık Kullanıcıya Sayfa görüntsünü getirmek için yazarız.
+           
             return View();
         }
 

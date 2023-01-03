@@ -14,6 +14,8 @@ namespace Hastane.Business.Services.AdminService
         Task AddManager(AddManagerDTO addManagerDTO);
 
         Task<List<ListOfManagersVM>> ListOfManager();
+        Task<UpdateManagerDTO> GetManager(Guid id);
+        Task UpdateManager(UpdateManagerDTO updateManagerDTO);
         Task AddPersonel(AddPersonelDTO addPersonelDTO);
 
         Task<List<ListOfPersonelVM>> ListOfPersonel();

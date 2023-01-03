@@ -11,30 +11,24 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using AutoMapper;
 
 namespace Hastane.Business.Services.AdminService
 {
     public class AdminService : IAdminService
     {
         private readonly IEmployeeRepo _employeeRepo;
-        public AdminService(IEmployeeRepo employeeRepo)
+        public readonly IMapper _mapper;
+        public AdminService(IEmployeeRepo employeeRepo,IMapper mapper)
         {
             _employeeRepo=employeeRepo;
+            _mapper = mapper;
         }
         public async Task AddManager(AddManagerDTO addManagerDTO)
         {
-            Employee employee=new Employee();
-            employee.Id= addManagerDTO.Id;
-            employee.Salary= addManagerDTO.Salary;
-            employee.Name= addManagerDTO.Name;
-            employee.Surname= addManagerDTO.Surname;
-            employee.CreatedTime = addManagerDTO.CreatedDate;
-            employee.Status= addManagerDTO.Status;
-            employee.EmailAddress= addManagerDTO.EmailAddress;
+            var employee = _mapper.Map<Employee>(addManagerDTO);
             employee.Password = GivePassword();
-            employee.Roles =addManagerDTO.Roles;
-            await _employeeRepo.Add(employee);
-            
+            await _employeeRepo.Add(employee);      
         }
 
         public async Task<List<ListOfManagersVM>> ListOfManager()
@@ -116,6 +110,33 @@ namespace Hastane.Business.Services.AdminService
         {
             await _employeeRepo.Delete(await _employeeRepo.GetById(id));
         }
-        
+        //------------------//
+        public async Task<UpdateManagerDTO> GetManager(Guid id)
+        {
+            var employeeVM = await _employeeRepo.GetFilteredFirstOrDefault(select: x => new UpdateManagerVm
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Surname = x.Surname,
+                EmailAddress = x.EmailAddress,
+                Salary = x.Salary,
+                IdentityNumber = x.IdentityNumber,
+                UpdatedDate = x.UpdatedTime
+            }, where: x => x.Id == id);
+            var updateDTO=_mapper.Map<UpdateManagerDTO>(employeeVM);
+            return updateDTO;
+        }
+
+        public async Task UpdateManager(UpdateManagerDTO updateManagerDTO)
+        {
+            var employee = await _employeeRepo.GetById(updateManagerDTO.Id);
+            employee.Name = updateManagerDTO.Name;
+            employee.Surname = updateManagerDTO.Surname;
+            employee.EmailAddress = updateManagerDTO.EmailAddress;
+            employee.Salary = updateManagerDTO.Salary;
+            employee.IdentityNumber = updateManagerDTO.IdentityNumber;
+            employee.UpdatedTime = updateManagerDTO.UpdatedDate;
+            await _employeeRepo.Update(employee);
+        }
     }
 }

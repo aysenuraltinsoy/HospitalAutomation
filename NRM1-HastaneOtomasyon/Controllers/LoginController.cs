@@ -56,9 +56,11 @@ namespace NRM1_HastaneOtomasyon.Controllers
 
             if (adminUser != null)
             {
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "Admin", new {area="Admin"});
             }
                
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Response.Cookies.Delete(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
         public async Task<IActionResult> LogOut()

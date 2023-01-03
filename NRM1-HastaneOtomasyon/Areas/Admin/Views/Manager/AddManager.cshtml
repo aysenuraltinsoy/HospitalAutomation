@@ -1,17 +1,17 @@
-﻿@model AddPersonelDTO
+﻿@model AddManagerDTO
 
 @{
-    ViewData["Title"] = "AddPersonel";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "AddManager";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Add Personel</h1>
+<h1>AddManager</h1>
 
-<h4>Employee</h4>
+<h4>Manager</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddPersonel">
+        <form asp-action="AddManager">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -24,14 +24,14 @@
                 <span asp-validation-for="Surname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" />
-                <span asp-validation-for="EmailAddress" class="text-danger"></span>
-            </div>         
-            <div class="form-group">
                 <label asp-for="Salary" class="control-label"></label>
                 <input asp-for="Salary" class="form-control" />
                 <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmailAddress" class="control-label"></label>
+                <input asp-for="EmailAddress" class="form-control" />
+                <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -41,6 +41,6 @@
 </div>
 
 <div>
-    <a asp-action="ListOfPersonel">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
